@@ -24,7 +24,6 @@ import shutil
 import warnings
 from pathlib import Path
 
-import diffusers
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -33,16 +32,6 @@ import transformers
 from accelerate import Accelerator
 from accelerate.logging import get_logger
 from accelerate.utils import ProjectConfiguration, set_seed
-from diffusers import (AutoencoderKL, DDPMScheduler, DiffusionPipeline,
-                       DPMSolverMultistepScheduler, StableDiffusionPipeline,
-                       UNet2DConditionModel)
-from diffusers.models.attention_processor import (AttnAddedKVProcessor,
-                                                  AttnAddedKVProcessor2_0,
-                                                  SlicedAttnAddedKVProcessor)
-from diffusers.optimization import get_scheduler
-from diffusers.training_utils import unet_lora_state_dict
-from diffusers.utils import check_min_version, is_wandb_available
-from diffusers.utils.import_utils import is_xformers_available
 from huggingface_hub import create_repo, upload_folder
 from huggingface_hub.utils import insecure_hashlib
 from packaging import version
@@ -53,6 +42,25 @@ from torchvision import transforms
 from tqdm.auto import tqdm
 from transformers import AutoTokenizer, PretrainedConfig
 
+import diffusers
+from diffusers import (
+    AutoencoderKL,
+    DDPMScheduler,
+    DiffusionPipeline,
+    DPMSolverMultistepScheduler,
+    StableDiffusionPipeline,
+    UNet2DConditionModel,
+)
+from diffusers.models.attention_processor import (
+    AttnAddedKVProcessor,
+    AttnAddedKVProcessor2_0,
+    SlicedAttnAddedKVProcessor,
+)
+from diffusers.optimization import get_scheduler
+from diffusers.training_utils import unet_lora_state_dict
+from diffusers.utils import check_min_version, is_wandb_available
+from diffusers.utils.import_utils import is_xformers_available
+
 from modules.lora import LoRALinearLayer, LoraLoaderMixin
 
 # from diffusers.models.lora import LoRALinearLayer
@@ -60,7 +68,7 @@ from modules.lora import LoRALinearLayer, LoraLoaderMixin
 
 
 # Will error if the minimal version of diffusers is not installed. Remove at your own risks.
-check_min_version("0.25.0")
+check_min_version("0.25.0.dev0")
 
 logger = get_logger(__name__)
 
@@ -172,8 +180,7 @@ def import_model_class_from_model_name_or_path(pretrained_model_name_or_path: st
 
         return CLIPTextModel
     elif model_class == "RobertaSeriesModelWithTransformation":
-        from diffusers.pipelines.alt_diffusion.modeling_roberta_series import \
-            RobertaSeriesModelWithTransformation
+        from diffusers.pipelines.alt_diffusion.modeling_roberta_series import RobertaSeriesModelWithTransformation
 
         return RobertaSeriesModelWithTransformation
     elif model_class == "T5EncoderModel":
