@@ -1,15 +1,8 @@
-# CUDA 11.8 wheels – change “cu118” to match your driver if needed
-torch==2.0.1			 # last LTS before 2.1; used by authors
-torchvision==0.15.2
-xformers==0.0.22
-# core libs
-diffusers==0.25.0                # stable tag that matches the dev hash they used
-transformers==4.39.3             # 15 Mar 2024 release
-accelerate==0.25.0
-einops==0.7.0
-timm==0.9.12
-peft==0.7.1                      # LoRA helpers
-huggingface_hub==0.22.1
-safetensors==0.4.1
-scipy==1.11.4
-Pillow==10.2.0
+torch==2.0.1
+torchvision
+einops
+accelerate
+timm
+transformers
+diffusers==0.25.0.dev0
+git+https://github.com/huggingface/diffusers.git
