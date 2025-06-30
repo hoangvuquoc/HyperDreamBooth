@@ -25,10 +25,9 @@ from typing import Optional, Tuple, Union
 
 import torch
 import torch.nn.functional as F
-from torch import nn
-
 from diffusers.utils import logging
 from diffusers.utils.import_utils import is_transformers_available
+from torch import nn
 
 if is_transformers_available():
     from transformers import CLIPTextModel, CLIPTextModelWithProjection
@@ -543,16 +542,12 @@ from typing import Callable, Dict, List, Optional, Union
 
 import safetensors
 import torch
-from huggingface_hub import model_info
-from packaging import version
-from torch import nn
-
 from diffusers import __version__
 from diffusers.loaders.lora_conversion_utils import (
     _convert_kohya_lora_to_diffusers, _maybe_map_sgm_blocks_to_diffusers)
 from diffusers.models.modeling_utils import (_LOW_CPU_MEM_USAGE_DEFAULT,
                                              load_model_dict_into_meta)
-from diffusers.utils import (HF_HUB_OFFLINE, USE_PEFT_BACKEND, _get_model_file,
+from diffusers.utils import (USE_PEFT_BACKEND, _get_model_file,
                              convert_state_dict_to_diffusers,
                              convert_state_dict_to_peft,
                              convert_unet_state_dict_to_peft,
@@ -563,6 +558,9 @@ from diffusers.utils import (HF_HUB_OFFLINE, USE_PEFT_BACKEND, _get_model_file,
                              recurse_remove_peft_layers, scale_lora_layers,
                              set_adapter_layers,
                              set_weights_and_activate_adapters)
+from huggingface_hub import model_info
+from packaging import version
+from torch import nn
 
 if is_transformers_available():
     from transformers import PreTrainedModel
@@ -718,7 +716,7 @@ class LoraLoaderMixin:
         force_download = kwargs.pop("force_download", False)
         resume_download = kwargs.pop("resume_download", False)
         proxies = kwargs.pop("proxies", None)
-        local_files_only = kwargs.pop("local_files_only", HF_HUB_OFFLINE)
+        local_files_only = kwargs.pop("local_files_only")
         use_auth_token = kwargs.pop("use_auth_token", None)
         revision = kwargs.pop("revision", None)
         subfolder = kwargs.pop("subfolder", None)
