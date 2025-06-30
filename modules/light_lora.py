@@ -30,7 +30,6 @@ from torch import nn
 from diffusers.utils import logging
 from diffusers.utils.import_utils import is_transformers_available
 
-
 if is_transformers_available():
     from transformers import CLIPTextModel, CLIPTextModelWithProjection
 
@@ -545,29 +544,21 @@ from packaging import version
 from torch import nn
 
 from diffusers import __version__
-from diffusers.models.modeling_utils import _LOW_CPU_MEM_USAGE_DEFAULT, load_model_dict_into_meta
-from diffusers.utils import (
-    DIFFUSERS_CACHE,
-    HF_HUB_OFFLINE,
-    USE_PEFT_BACKEND,
-    _get_model_file,
-    convert_state_dict_to_diffusers,
-    convert_state_dict_to_peft,
-    convert_unet_state_dict_to_peft,
-    delete_adapter_layers,
-    deprecate,
-    get_adapter_name,
-    get_peft_kwargs,
-    is_accelerate_available,
-    is_transformers_available,
-    logging,
-    recurse_remove_peft_layers,
-    scale_lora_layers,
-    set_adapter_layers,
-    set_weights_and_activate_adapters,
-)
-from diffusers.loaders.lora_conversion_utils import _convert_kohya_lora_to_diffusers, _maybe_map_sgm_blocks_to_diffusers
-
+from diffusers.loaders.lora_conversion_utils import (
+    _convert_kohya_lora_to_diffusers, _maybe_map_sgm_blocks_to_diffusers)
+from diffusers.models.modeling_utils import (_LOW_CPU_MEM_USAGE_DEFAULT,
+                                             load_model_dict_into_meta)
+from diffusers.utils import (HF_HUB_OFFLINE, USE_PEFT_BACKEND, _get_model_file,
+                             convert_state_dict_to_diffusers,
+                             convert_state_dict_to_peft,
+                             convert_unet_state_dict_to_peft,
+                             delete_adapter_layers, deprecate,
+                             get_adapter_name, get_peft_kwargs,
+                             is_accelerate_available,
+                             is_transformers_available, logging,
+                             recurse_remove_peft_layers, scale_lora_layers,
+                             set_adapter_layers,
+                             set_weights_and_activate_adapters)
 
 if is_transformers_available():
     from transformers import PreTrainedModel
@@ -576,7 +567,8 @@ if is_transformers_available():
 
 if is_accelerate_available():
     from accelerate import init_empty_weights
-    from accelerate.hooks import AlignDevicesHook, CpuOffload, remove_hook_from_module
+    from accelerate.hooks import (AlignDevicesHook, CpuOffload,
+                                  remove_hook_from_module)
 
 logger = logging.get_logger(__name__)
 
@@ -718,7 +710,7 @@ class LoraLoaderMixin:
         """
         # Load the main state dict first which has the LoRA layers for either of
         # UNet and text encoder or both.
-        cache_dir = kwargs.pop("cache_dir", DIFFUSERS_CACHE)
+        cache_dir = kwargs.pop("cache_dir")
         force_download = kwargs.pop("force_download", False)
         resume_download = kwargs.pop("resume_download", False)
         proxies = kwargs.pop("proxies", None)
@@ -939,7 +931,8 @@ class LoraLoaderMixin:
                 logger.warn(warn_message)
 
         if USE_PEFT_BACKEND and len(state_dict.keys()) > 0:
-            from peft import LoraConfig, inject_adapter_in_model, set_peft_model_state_dict
+            from peft import (LoraConfig, inject_adapter_in_model,
+                              set_peft_model_state_dict)
 
             if adapter_name in getattr(unet, "peft_config", {}):
                 raise ValueError(
