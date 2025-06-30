@@ -1,9 +1,9 @@
-export MODEL_NAME="stable-diffusion-models/realisticVisionV40_v40VAE"
-export INSTANCE_DIR="projects/AIGC/dataset/AI_drawing/instance_dir"
-export OUTPUT_DIR="projects/AIGC/lora_model_test"
+export MODEL_NAME="/mnt/md0/realistic-vision-v40"
+export INSTANCE_DIR="data"
+export OUTPUT_DIR="output"
 
 
-CUDA_VISIBLE_DEVICES=0 \
+CUDA_VISIBLE_DEVICES=1 \
 accelerate launch --mixed_precision="fp16" train_dreambooth_light_lora.py \
   --pretrained_model_name_or_path=$MODEL_NAME \
   --instance_data_dir=$INSTANCE_DIR \
