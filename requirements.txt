@@ -3,17 +3,22 @@ torch==2.0.1                # 08 May 2023 :contentReference[oaicite:0]{index=0}
 torchvision==0.15.2         # companion build for torch 2.0.1 (PyPI release 05 May 2023)
 triton==2.0.0               # kernels that torch 2.0.* expects
 einops==0.7.0               # 01 Oct 2023 :contentReference[oaicite:1]{index=1}
-accelerate==0.24.1          # 30 Oct 2023 :contentReference[oaicite:2]{index=2}
+accelerate==0.23.0          # 30 Oct 2023 :contentReference[oaicite:2]{index=2}
 timm==0.9.12                # 24 Nov 2023 :contentReference[oaicite:3]{index=3}
 transformers==4.35.2        # 15 Nov 2023 :contentReference[oaicite:4]{index=4}
-safetensors==0.4.0          # 18 Sep 2023 (first safe build before 2024)
+safetensors==0.3.3          # 18 Sep 2023 (first safe build before 2024)
 huggingface-hub<=0.19.4     # 10 Oct 2023 :contentReference[oaicite:5]{index=5}
 tokenizers<=0.15.0          # 06 Oct 2023 :contentReference[oaicite:6]{index=6}
 numpy==1.24.4               # last 1.x bug-fix series (05 Jun 2023)
-Pillow==10.1.0              # 02 Oct 2023
+Pillow==9.5.0              # 02 Oct 2023
 packaging==23.2             # 01 Oct 2023 :contentReference[oaicite:7]{index=7}
 filelock==3.13.1            # 09 Nov 2023
 psutil==5.9.6               # 27 Oct 2023
+fsspec==2023.10.0
+urllib3==1.26.18
+requests==2.31.0
+tqdm==4.66.1
+idna==3.4
 
 # Diffusers must be installed from the last pre-refactor commit (07 Dec 2023):
 diffusers @ git+https://github.com/huggingface/diffusers.git@2243a594833ac7274c28aea0b2606a38e5be3eca
