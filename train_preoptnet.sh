@@ -1,9 +1,9 @@
 # run train
-export MODEL_NAME="stable-diffusion-models/realisticVisionV40_v40VAE"
-export INSTANCE_DIR="projects/AIGC/dataset/CelebA-HQ-10k"
-export OUTPUT_DIR="experiments/pretrained/CelebA-HQ-10k"
+export MODEL_NAME="/mnt/md0/realistic-vision-v40"
+export INSTANCE_DIR="CelebA-HQ-1k"
+export OUTPUT_DIR="output/preoptnet"
 
-CUDA_VISIBLE_DEVICES=0 \
+CUDA_VISIBLE_DEVICES=2 \
 accelerate launch --mixed_precision="fp16" train_preoptnet.py \
   --pretrained_model_name_or_path $MODEL_NAME \
   --instance_data_dir $INSTANCE_DIR \

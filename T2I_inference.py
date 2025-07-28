@@ -1,7 +1,11 @@
-from diffusers import StableDiffusionPipeline, DDIMScheduler
-import torch
 import time
-pretrain_model_path="stable-diffusion-models/realisticVisionV40_v40VAE"
+
+import torch
+from diffusers import DDIMScheduler, StableDiffusionPipeline
+from diffusers.utils.state_dict_utils import convert_state_dict_to_diffusers
+from safetensors.torch import load_file, save_file
+
+pretrain_model_path = "/mnt/md0/realistic-vision-v40/"
 
 noise_scheduler = DDIMScheduler(
     num_train_timesteps=1000,
@@ -10,20 +14,27 @@ noise_scheduler = DDIMScheduler(
     beta_schedule="scaled_linear",
     clip_sample=False,
     set_alpha_to_one=False,
-    steps_offset=1
+    steps_offset=1,
 )
 
-pipe = StableDiffusionPipeline.from_pretrained(pretrain_model_path,
-                                               torch_dtype=torch.float16,
-                                               scheduler=noise_scheduler,
-                                               requires_safety_checker=False)
+pipe = StableDiffusionPipeline.from_pretrained(
+    pretrain_model_path,
+    torch_dtype=torch.float16,
+    scheduler=noise_scheduler,
+    requires_safety_checker=False,
+)
 
 
+lora_model_path = "output/light_lora/checkpoint-2000/"
 
 
-lora_model_path = "/projects/AIGC/experiments2/rank_relax/"
+old = load_file(lora_model_path + "pytorch_lora_weights.safetensors")
+new = convert_state_dict_to_diffusers(old, original_type="peft")
+save_file(new, lora_model_path + "pytorch_lora_weights-new.safetensors")
 
-pipe.load_lora_weights(lora_model_path, weight_name="pytorch_lora_weights.safetensors")
+pipe.load_lora_weights(
+    lora_model_path, weight_name="pytorch_lora_weights-new.safetensors"
+)
 
 # pipe.load_lora_weights(lora_model_path)
 prompt = "A [V] face"
@@ -50,8 +61,8 @@ pipe.to("cuda")
 t0 = time.time()
 for i in range(10):
     # image = pipe(prompt, negative_prompt=negative_prompt, height=512, width=512, num_inference_steps=30, guidance_scale=7.5,cross_attention_kwargs={"scale":1}).images[0]
-    image = pipe(prompt,  height=512, width=512, num_inference_steps=30).images[0]
+    image = pipe(prompt, height=512, width=512, num_inference_steps=30).images[0]
     image.save("aigc_samples/test_%d.jpg" % i)
 t1 = time.time()
-print("time elapsed: %f"%((t1-t0)/10))
-print("LoRA: %s"%lora_model_path)
+print("time elapsed: %f" % ((t1 - t0) / 10))
+print("LoRA: %s" % lora_model_path)
